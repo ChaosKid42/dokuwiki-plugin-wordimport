@@ -21,8 +21,14 @@ class ListItem extends Paragraph
     public function parse()
     {
         parent::parse();
-        $this->level = (int)$this->p->xpath('w:pPr/w:numPr/w:ilvl')[0]->attributes('w', true)->val;
-        $id = (int)$this->p->xpath('w:pPr/w:numPr/w:numId')[0]->attributes('w', true)->val;
+        $this->level = 0;
+        if (count($this->p->xpath('w:pPr/w:numPr/w:ilvl')) > 0) {
+            $this->level = (int)$this->p->xpath('w:pPr/w:numPr/w:ilvl')[0]->attributes('w', true)->val;
+        }
+        $id = 1;
+        if (count($this->p->xpath('w:pPr/w:numPr/w:numId')) > 0) {
+            $id = (int)$this->p->xpath('w:pPr/w:numPr/w:numId')[0]->attributes('w', true)->val;
+        }
         $this->type = $this->docx->getNumbering()->getType($id, $this->level);
     }
 
